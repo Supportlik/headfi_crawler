@@ -1,7 +1,7 @@
 {
   "name": "headfi",
   "private": false,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "a Sails application",
   "keywords": [],
   "dependencies": {
@@ -37,5 +37,5 @@
     "url": "git://github.com/anonymous node/sails user/headfi.git"
   },
   "author": "anonymous node/sails user",
-  "license": ""
+  "license": "MIT"
 }

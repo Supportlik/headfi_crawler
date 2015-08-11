@@ -15,6 +15,22 @@ app.controller("data_controller", function($scope, $http, Lightbox){
 
   $scope.selected_date = null;
 
+  $scope.reload = function(){
+    $scope.loaded_dates = false;
+    $scope.loaded_data = false;
+    $scope.sending = true;
+    $scope.failed = false;
+    $scope.dates.splice(0, $scope.dates.length);
+    $scope.offers.splice(0, $scope.offers.length);
+    $http.get("/offer/load").then(function(res){
+      $scope.get_dates();
+    }, function(res){
+      console.log("FAIL", res);
+      $scope.sending = false;
+    });
+
+  };
+
   $scope.open_lightbox_img = function(img, caption){
     var img_obj = {
       url: img,
