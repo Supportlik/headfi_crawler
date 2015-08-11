@@ -62,7 +62,7 @@ app.controller("data_controller", function($scope, $http, Lightbox){
           poster_name: offer.poster_name,
           poster_url: offer.poster_url,
           poster_rep: offer.poster_reputation,
-          poster_rep_url: offer.poster_rep_url,
+          poster_rep_url: offer.poster_reputation_url,
 
           img_url: offer.img_url,
 

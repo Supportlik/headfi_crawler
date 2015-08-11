@@ -1,4 +1,4 @@
-var app = angular.module('headfi', ['smart-table', 'bootstrapLightbox']);
+var app = angular.module('headfi', ['smart-table', 'bootstrapLightbox', 'ngAnimate']);
 
 app.filter('unique', function () {
 

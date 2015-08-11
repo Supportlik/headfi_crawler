@@ -76,8 +76,8 @@ module.exports = {
             type: type,
             price: 0,
             currency: {
-              name: "",
-              symbol: ""
+              name: "NO",
+              symbol: "X"
             },
             bumped: "",
             views: 0,

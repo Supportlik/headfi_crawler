@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" />
-  <link rel="stylesheet" href="bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.min.css" />
+  <link rel="stylesheet" href="css/main.css"/>
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css"/>
+  <link rel="stylesheet" href="bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.min.css"/>
 
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/angularjs/angular.min.js"></script>
@@ -16,143 +16,183 @@
   <script src="js/app.js"></script>
   <script src="js/data_controller.js"></script>
 </head>
-<body ng-app="headfi">
-<div ng-controller="data_controller">
-  <button class="btn btn-default" ng-disabled="sending" ng-click="get_dates()">GET DATES</button>
-  <div ng-if="loaded_dates" id="selection_container">
-    <div id="selection_date">
-      <select class="form-control" ng-options="date.txt for date in dates" ng-model="selected_date"></select>
-      {{selected_date}}
-      <button class="btn btn-default" ng-disabled="sending" ng-if="selected_date != null" ng-click="get_offers()">GET OFFERS</button>
+<body ng-app="headfi" ng-controller="data_controller">
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Headfi Crawler</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <form class="navbar-form navbar-left" role="search">
+          <select ng-if="loaded_dates" class="form-control animate-if" ng-options="date.txt for date in dates"
+                  ng-model="selected_date"></select>
+          <button ng-if="loaded_dates" class="btn btn-default" ng-disabled="sending" ng-if="selected_date != null"
+                  ng-click="get_offers()">
+              GET OFFERS
+          </button>
+          <button class="btn btn-default"  ng-disabled="sending" ng-click="get_dates()">GET DATES</button>
+          <button class="btn btn-default"  ng-disabled="sending" ng-click="reload()">LOAD NEW DATA</button>
+        </form>
+
+      </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container-fluid -->
+</nav>
+
+<div class="semi_container">
+  <div class="row">
+    <div class="col-lg-12 animate-if" id="data" ng-if="loaded_data">
+      <table st-table="offers" class="table table-stripped">
+        <thead>
+        <tr class="sort-column">
+          <th>
+            Img
+          </th>
+          <th st-sort="thread_title">
+            Title
+          </th>
+          <th st-sort="thread_description">
+            Description
+          </th>
+          <th st-sort="thread_date_txt">
+            Date
+          </th>
+          <th st-sort="poster_name">
+            Poster
+          </th>
+          <th st-sort="poster_rep">
+            Poster Rep
+          </th>
+          <th st-sort="type">
+            Type
+          </th>
+          <th st-sort="price">
+            Price
+          </th>
+          <th st-sort="currency">
+            Currency
+          </th>
+          <th st-sort="bumped">
+            Bumped
+          </th>
+          <th st-sort="replies">
+            Replies
+          </th>
+          <th st-sort="views">
+            Views
+          </th>
+          <th>
+
+          </th>
+        </tr>
+        <tr>
+          <th colspan="15"><input st-search="" class="form-control" placeholder="global search ..." type="text"/></th>
+        </tr>
+        <tr>
+          <th colspan="2"><input st-search="thread_title" class="form-control" placeholder="Title" type="text"/></th>
+          <th colspan="1"><input st-search="thread_description" class="form-control" placeholder="Description"
+                                 type="text"/></th>
+          <th colspan="1"><input st-search="thread_date_txt" class="form-control" placeholder="Date" type="text"/></th>
+          <th colspan="1"><input st-search="poster_name" class="form-control" placeholder="Poster" type="text"/></th>
+          <th colspan="1"><input st-search="poster_rep" class="form-control" placeholder="Reputation" type="text"/></th>
+          <th colspan="1">
+            <select class="form-control" st-search="type">
+              <option value="">All</option>
+              <option ng-repeat="of in offers_copy | unique: 'type'" value="{{of.type}}">{{of.type}}</option>
+            </select>
+          <th colspan="1"><input st-search="price" class="form-control" placeholder="Price" type="text"/></th>
+          <th colspan="1">
+            <select class="form-control" st-search="currency">
+              <option value="">All</option>
+              <option ng-repeat="of in offers_copy | unique: 'currency'" value="{{of.currency}}">{{of.currency}} -
+                {{of.currency_symbole}}
+              </option>
+            </select>
+          </th>
+          <th colspan="1"><input st-search="bumped" class="form-control" placeholder="Bumped" type="text"/></th>
+          <th colspan="1"><input st-search="replies" class="form-control" placeholder="Replies" type="text"/></th>
+          <th colspan="2"><input st-search="views" class="form-control" placeholder="Views" type="text"/></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="offer in offers" class="animate-if">
+          <td>
+            <img ng-click="open_lightbox_img(offer.img_url, offer.title)" ng-src="{{offer.img_url}}" alt="No Picture"/>
+          </td>
+          <td>
+            {{offer.thread_title}}
+          </td>
+          <td>
+            {{offer.thread_description}}
+          </td>
+          <td>
+            {{offer.thread_date_txt}}
+          </td>
+          <td>
+            {{offer.poster_name}}
+          </td>
+          <td>
+            {{offer.poster_rep}}
+          </td>
+          <td>
+            {{offer.type}}
+          </td>
+          <td>
+            {{offer.price}}
+          </td>
+          <td>
+            {{offer.currency}} - {{offer.currency_symbole}}
+          </td>
+          <td>
+            {{offer.bumped}}
+          </td>
+          <td>
+            {{offer.replies}}
+          </td>
+          <td>
+            {{offer.views}}
+          </td>
+          <td>
+            <a target="_blank" ng-href="{{offer.poster_url}}">
+              <button class="btn btn-info btn-sm"><span class="glyphicon glyphicon-user"></span></button>
+            </a>
+            <a target="_blank" ng-href="{{offer.poster_rep_url}}">
+              <button class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-star"></span></button>
+            </a>
+            <a target="_blank" ng-href="{{offer.thread_url}}">
+              <button class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-th-list"></span></button>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+          <td colspan="13" class="text-center">
+            <div st-pagination="" st-items-by-page="6" st-displayed-pages="7"></div>
+          </td>
+        </tr>
+        </tfoot>
+      </table>
+
     </div>
   </div>
-  <div id="data" ng-if="loaded_data">
-    <table st-table="offers" class="table table-stripped">
-      <thead>
-      <tr>
-        <th>
-          Img
-        </th>
-        <th st-sort="thread_title">
-          Title
-        </th>
-        <th st-sort="thread_description">
-          Description
-        </th>
-        <th st-sort="thread_date_txt">
-          Date
-        </th>
-        <th st-sort="poster_name">
-          Poster
-        </th>
-        <th st-sort="poster_rep">
-          Poster Rep
-        </th>
-        <th st-sort="type">
-          Type
-        </th>
-        <th st-sort="price">
-          Price
-        </th>
-        <th st-sort="currency">
-          Currency
-        </th>
-        <th st-sort="bumped">
-          Bumped
-        </th>
-        <th st-sort="replies">
-          Replies
-        </th>
-        <th st-sort="views">
-          Views
-        </th>
-        <th>
-
-        </th>
-      </tr>
-      <tr>
-        <th colspan="15"><input st-search="" class="form-control" placeholder="global search ..." type="text"/></th>
-      </tr>
-      <tr>
-        <th colspan="2"><input st-search="thread_title" class="form-control" placeholder="Title" type="text"/></th>
-        <th colspan="1"><input st-search="thread_description" class="form-control" placeholder="Description" type="text"/></th>
-        <th colspan="1"><input st-search="thread_date_txt" class="form-control" placeholder="Date" type="text"/></th>
-        <th colspan="1"><input st-search="poster_name" class="form-control" placeholder="Poster" type="text"/></th>
-        <th colspan="1"><input st-search="poster_rep" class="form-control" placeholder="Reputation" type="text"/></th>
-        <th colspan="1">
-          <select class="form-control" st-search="type">
-            <option value="">All</option>
-            <option ng-repeat="of in offers_copy | unique: 'type'" value="{{of.type}}">{{of.type}}</option>
-          </select>
-        <th colspan="1"><input st-search="price" class="form-control" placeholder="Price" type="text"/></th>
-        <th colspan="1">
-          <select class="form-control" st-search="currency">
-            <option value="">All</option>
-            <option ng-repeat="of in offers_copy | unique: 'currency'" value="{{of.currency}}">{{of.currency}} - {{of.currency_symbole}}</option>
-          </select>
-        </th>
-        <th colspan="1"><input st-search="bumped" class="form-control" placeholder="Bumped" type="text"/></th>
-        <th colspan="1"><input st-search="replies" class="form-control" placeholder="Replies" type="text"/></th>
-        <th colspan="2"><input st-search="views" class="form-control" placeholder="Views" type="text"/></th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr ng-repeat="offer in offers">
-        <td>
-          <img ng-click="open_lightbox_img(offer.img_url, offer.title)" ng-src="{{offer.img_url}}"/>
-        </td>
-        <td>
-          {{offer.thread_title}}
-        </td>
-        <td>
-          {{offer.thread_description}}
-        </td>
-        <td>
-          {{offer.thread_date_txt}}
-        </td>
-        <td>
-          {{offer.poster_name}}
-        </td>
-        <td>
-          {{offer.poster_rep}}
-        </td>
-        <td>
-          {{offer.type}}
-        </td>
-        <td>
-          {{offer.price}}
-        </td>
-        <td>
-          {{offer.currency}} - {{offer.currency_symbole}}
-        </td>
-        <td>
-          {{offer.bumped}}
-        </td>
-        <td>
-          {{offer.replies}}
-        </td>
-        <td>
-          {{offer.views}}
-        </td>
-        <td>
-          <a target="_blank" ng-href="{{offer.poster_url}}"><span>P</span></a>
-          <a target="_blank" ng-href="{{offer.poster_rep_url}}"><span>R</span></a>
-          <a target="_blank" ng-href="{{offer.thread_url}}"><span>T</span></a>
-        </td>
-      </tr>
-      </tbody>
-      <tfoot>
-      <tr>
-        <td colspan="13" class="text-center">
-          <div st-pagination="" st-items-by-page="6" st-displayed-pages="7"></div>
-        </td>
-      </tr>
-      </tfoot>
-    </table>
 
   </div>
-
-
-</div>
 </body>
 </html>
