@@ -1,6 +1,6 @@
 {
   "name": "headfi",
-  "private": true,
+  "private": false,
   "version": "0.0.1",
   "description": "a Sails application",
   "keywords": [],
