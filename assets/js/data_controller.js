@@ -22,7 +22,7 @@ app.controller("data_controller", function($scope, $http, Lightbox){
     $scope.failed = false;
     $scope.dates.splice(0, $scope.dates.length);
     $scope.offers.splice(0, $scope.offers.length);
-    $http.get("/headfi/offer/load").then(function(res){
+    $http.get("offer/load").then(function(res){
       $scope.get_dates();
     }, function(res){
       console.log("FAIL", res);
@@ -45,7 +45,7 @@ app.controller("data_controller", function($scope, $http, Lightbox){
     $scope.sending = true;
     $scope.failed = false;
     $scope.offers.splice(0, $scope.offers.length);
-    $http.get("/headfi/offer/get_by_date", {params: {date: $scope.selected_date.date_txt}}).then(function(res){
+    $http.get("offer/get_by_date", {params: {date: $scope.selected_date.date_txt}}).then(function(res){
       console.log("SUC offer", res);
       res.data.forEach(function(offer){
 
@@ -96,7 +96,7 @@ app.controller("data_controller", function($scope, $http, Lightbox){
     $scope.failed = false;
     $scope.dates.splice(0, $scope.dates.length);
     $scope.offers.splice(0, $scope.offers.length);
-    $http.get("/headfi/offer/crawl_dates").then(function(res){
+    $http.get("offer/crawl_dates").then(function(res){
       console.log("SUC", res);
       res.data.forEach(function(date){
         $scope.dates.push({
